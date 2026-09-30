@@ -43,12 +43,21 @@ Install the project dependencies from `requirements.txt`:
 ```bash
 pip install -r requirements.txt
 ```
+Youre basicly set up now.
 
+# Utility commands
 
+## To update code on HPC pull command
 
+```bash
+git pull origin main
+```
 
+## Activate venv each time on logon.
 
-
+```bash
+source venv/bin/activate
+```
 # Submit and manage batch jobs
 
 Model training should be submitted to the **course-specific batch queue/resources**.
