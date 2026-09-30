@@ -38,10 +38,10 @@ source venv/bin/activate
 
 ## 3. Install the required libraries
 
-Install the project dependencies from `requirements.txt`:
+Install the project dependencies from `Project_Info/requirements.txt`:
 
 ```bash
-pip install -r requirements.txt
+pip install -r Project_Info/requirements.txt
 ```
 Youre basicly set up now.
 
@@ -57,6 +57,12 @@ git pull origin main
 
 ```bash
 source venv/bin/activate
+```
+
+## Check personal storage capacity
+
+```bash
+getquota_zhome.sh
 ```
 # Submit and manage batch jobs
 

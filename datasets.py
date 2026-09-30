@@ -5,9 +5,22 @@ from PIL import Image
 import torch
 from torchvision import transforms as T
 
+
+##tilføjet for vi ikke skal ændre hele tiden
+
+HPC = False
+HPC_DATA_PATH = "Path that is on the course module (preuploaded to course datasetfolder on hpc)"
+PC_DATA_PATH = 'Data/ufc101'
+
+
+root_dir = HPC_DATA_PATH if HPC else PC_DATA_PATH
+
+
+
+
 class FrameImageDataset(torch.utils.data.Dataset):
     def __init__(self, 
-    root_dir='/work3/ppar/data/ucf101',
+    root_dir,
     split='train', 
     transform=None
 ):
@@ -40,7 +53,7 @@ class FrameImageDataset(torch.utils.data.Dataset):
 
 class FrameVideoDataset(torch.utils.data.Dataset):
     def __init__(self, 
-    root_dir = '/work3/ppar/data/ucf101', 
+    root_dir, 
     split = 'train', 
     transform = None,
     stack_frames = True
@@ -93,7 +106,7 @@ class FrameVideoDataset(torch.utils.data.Dataset):
 if __name__ == '__main__':
     from torch.utils.data import DataLoader
 
-    root_dir = '/work3/ppar/data/ucf101'
+
 
     transform = T.Compose([T.Resize((64, 64)),T.ToTensor()])
     frameimage_dataset = FrameImageDataset(root_dir=root_dir, split='val', transform=transform)
@@ -105,14 +118,15 @@ if __name__ == '__main__':
     framevideostack_loader = DataLoader(framevideostack_dataset,  batch_size=8, shuffle=False)
     framevideolist_loader = DataLoader(framevideolist_dataset,  batch_size=8, shuffle=False)
 
-    # for frames, labels in frameimage_loader:
+    #for frames, labels in frameimage_loader:
     #     print(frames.shape, labels.shape) # [batch, channels, height, width]
 
-    # for video_frames, labels in framevideolist_loader:
+    #for video_frames, labels in framevideolist_loader:
     #     print(45*'-')
     #     for frame in video_frames: # loop through number of frames
     #         print(frame.shape, labels.shape)# [batch, channels, height, width]
 
     for video_frames, labels in framevideostack_loader:
+        
         print(video_frames.shape, labels.shape) # [batch, channels, number of frames, height, width]
             
