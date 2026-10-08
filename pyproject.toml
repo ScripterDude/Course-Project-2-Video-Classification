@@ -1,0 +1,22 @@
+[project]
+name = "course-project-2-video-classification"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "cOlterO", email = "43588141+cOlterO@users.noreply.github.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "pandas>=3.0.6",
+    "pillow>=12.3.0",
+    "torch>=2.14.0",
+    "torchvision>=0.29.0",
+]
+
+[project.scripts]
+course-project-2-video-classification = "course_project_2_video_classification:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
