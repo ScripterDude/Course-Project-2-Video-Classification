@@ -4,3 +4,4 @@ ufc10/
 /experiments/
 .DS_Store
 .idea
+/__pycache__
