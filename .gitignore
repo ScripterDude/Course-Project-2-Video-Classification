@@ -1,3 +1,5 @@
 .venv/
 ufc10/
 /Data
+/experiments/
+.DS_Store
