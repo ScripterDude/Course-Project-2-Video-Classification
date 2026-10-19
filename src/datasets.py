@@ -9,11 +9,13 @@ from torchvision import transforms as T
 ##tilføjet for vi ikke skal ændre hele tiden
 
 HPC = False
-HPC_DATA_PATH = "Path that is on the course module (preuploaded to course datasetfolder on hpc)"
+#set hpc folder from jobscript.sh
+if 'DATA_DIR' in os.environ:
+    HPC = True
+
 PC_DATA_PATH = 'Data/ufc101'
 
-
-root_dir = HPC_DATA_PATH if HPC else PC_DATA_PATH
+root_dir = os.environ['DATA_DIR'] if HPC else PC_DATA_PATH
 
 
 
