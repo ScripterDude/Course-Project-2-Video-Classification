@@ -15,7 +15,7 @@
 #BSUB -N
 
 module load python3/3.14.2
-module load cuda/12.8.1
+module load cuda/12.6.3
 
 source venv/bin/activate
 

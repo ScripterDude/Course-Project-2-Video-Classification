@@ -24,11 +24,11 @@ cd Course-Project-2-Video-Classification
 
 ## 2. Create and activate a virtual environment
 
-Activate the server side modules to get python 3.14.2 and cuda 12.8.1
+Activate the server side modules to get python 3.14.2 and cuda 12.6.3
 
 ```bash
 module load python3/3.14.2
-module load cuda/12.8.1
+module load cuda/12.6.3
 ```
 
 Create a Python virtual environment:
