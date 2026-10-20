@@ -8,11 +8,7 @@
 #BSUB -W 02:00
 #BSUB -o train_single_frame_%J.out
 #BSUB -e train_single_frame_%J.err
-#BSUB -u s184208@student.dtu.dk
-### -- send notification at start --
-#BSUB -B
-### -- send notification at completion--
-#BSUB -N
+
 
 module load python3/3.14.2
 module load cuda/12.6.3
