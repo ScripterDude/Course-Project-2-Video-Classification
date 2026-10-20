@@ -29,7 +29,7 @@ weights = ResNet50_Weights.DEFAULT
 rgb_weight = 0.35
 
 #log experiments
-# root_dir = "../Data/ucf101_noleakage"
+root_dir = "Data/ucf101_noleakage"
 model_name = "DualStreamResNet50"
 experiment_name = (f"seed{seed}_epochs{epochs}_bs{batch_size}_lr{learning_rate}_wd{weight_decay}_{resize[0]}x{resize[1]}_pat{patience}_time{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}")
 
@@ -70,15 +70,10 @@ print("Saving run to:", run_dir)
 rgb_transform = weights.transforms()
 
 rgb_train_dataset = FrameImageDataset(root_dir=root_dir, split='train', transform=rgb_transform)
-# rgb_train_dataset = FrameImageDataset(root_dir=root_dir, split='train')
 flow_train_dataset = FlowVideoDataset(root_dir=root_dir, split='train')
 
 rgb_val_dataset = FrameVideoDataset(root_dir=root_dir,split='val',transform=rgb_transform,stack_frames=True)
-# rgb_val_dataset = FrameVideoDataset(root_dir=root_dir,split='val',stack_frames=True)
 flow_val_dataset = FlowVideoDataset(root_dir=root_dir, split='val')
-
-# if rgb_val_dataset.video_paths != flow_val_dataset.video_paths:
-#     raise ValueError('RGB and flow validation video order does not match.')
 
 rgb_train_loader = DataLoader(rgb_train_dataset, batch_size=batch_size, shuffle=True)
 flow_train_loader = DataLoader(flow_train_dataset, batch_size=batch_size, shuffle=True)
@@ -157,9 +152,6 @@ for epoch in range(epochs):
         for rgb_batch, flow_batch in zip(rgb_val_loader, flow_val_loader):
             videos, labels = rgb_batch
             flows, flow_labels = flow_batch
-
-            # if not torch.equal(labels, flow_labels):
-            #     raise ValueError('RGB and flow validation labels do not match.')
 
             videos = videos.to(device)
             flows = cap_flows(flows.to(device))
