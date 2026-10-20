@@ -15,7 +15,7 @@ module load cuda/12.6.3
 
 source venv/bin/activate
 
-export DATA_DIR="${DATA_DIR:-/dtu/datasets1/02516/ucf101noleakage}"
+export DATA_DIR="${DATA_DIR:-/dtu/datasets1/02516/ucf101_noleakage}"
 
 python3 -u src/train_dualstream_flow.py
 
