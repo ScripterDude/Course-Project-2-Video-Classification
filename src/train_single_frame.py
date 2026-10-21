@@ -14,7 +14,7 @@ from datasets import FrameImageDataset, FrameVideoDataset
 from models import ResNet50Stream
 
 model_name = "SingleFrameResNet50"
-dataset_variant = os.getenv("DATASET_VARIANT", "original")
+dataset_variant = os.getenv("DATASET_VARIANT", "noleakage")
 default_dirs = {
     "original": "Data/ufc101",
     "noleakage": "Data/ucf101_noleakage",
