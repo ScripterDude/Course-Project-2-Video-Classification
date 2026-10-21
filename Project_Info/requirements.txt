@@ -9,4 +9,4 @@ torch==2.11.0+cu126; sys_platform == "linux" or sys_platform == "win32"
 torchvision==0.26.0+cu126; sys_platform == "linux" or sys_platform == "win32"
 torch==2.11.0; sys_platform != "linux" and sys_platform != "win32"
 torchvision==0.26.0; sys_platform != "linux" and sys_platform != "win32"
-    
+wandb
