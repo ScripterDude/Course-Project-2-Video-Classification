@@ -11,7 +11,7 @@ from torchvision.models import ResNet50_Weights
 from datasets import FrameVideoDataset
 from models import ResNet50Stream
 
-dataset_variant = os.getenv("DATASET_VARIANT", "noleakage")
+dataset_variant = os.getenv("DATASET_VARIANT", "original")
 model_dir = (
     Path("experiments") / "SingleFrameResNet50" / dataset_variant / "final"
 )
