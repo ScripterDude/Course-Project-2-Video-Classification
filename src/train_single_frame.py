@@ -1,163 +1,221 @@
-from torch.utils.data import DataLoader
-from torchvision import transforms as T
-import torch
-from datasets import FrameImageDataset, FrameVideoDataset, root_dir
-from models import SingleFrameCNN
-from pathlib import Path
-import pandas as pd
-import matplotlib.pyplot as plt
 import json
+import os
+import time
+from pathlib import Path
 
-# set hyperparams
-seed = 0
-torch.manual_seed(seed)
-epochs = 30
-batch_size = 32
-learning_rate = 0.001
-weight_decay = 0.0001
-resize = (64, 64)
-patience = 5
-best_val_accuracy = -1.0
-epochs_without_improvement = 0
+import matplotlib.pyplot as plt
+import pandas as pd
+import torch
+import wandb
+from torch.utils.data import DataLoader
+from torchvision.models import ResNet50_Weights
 
-#log experiments
-model_name = "SingleFrameCNN"
-experiment_name = (f"seed{seed}_epochs{epochs}_bs{batch_size}_lr{learning_rate}_wd{weight_decay}_{resize[0]}x{resize[1]}_pat{patience}_time{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}")
+from datasets import FrameImageDataset, FrameVideoDataset
+from models import ResNet50Stream
 
-experiment_dir = Path("experiments") / model_name / experiment_name
-run_dir = experiment_dir
-run_dir.mkdir(parents=True, exist_ok=True)
-
-#save conf:
-model_config = {
-    "model_name": model_name,
-    "num_classes": 10,
-    "seed": seed,
-    "epochs": epochs,
-    "batch_size": batch_size,
-    "learning_rate": learning_rate,
-    "weight_decay": weight_decay,
-    "resize": resize,
-    "patience": patience,
-    "data_dir": root_dir,
+model_name = "SingleFrameResNet50"
+dataset_variant = os.getenv("DATASET_VARIANT", "original")
+default_dirs = {
+    "original": "Data/ufc101",
+    "noleakage": "Data/ucf101_noleakage",
 }
-
-(run_dir / "config.json").write_text(json.dumps(model_config))
-history = []
-print("Saving run to:", run_dir)
-
-#prep data
-transform = T.Compose([T.Resize(resize), T.ToTensor()])
-train_dataset = FrameImageDataset(root_dir=root_dir, split='train', transform=transform)
-val_dataset = FrameVideoDataset( root_dir=root_dir, split="val",transform=transform, stack_frames=True)
-
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False )
-
-#check hw
-if torch.cuda.is_available():
-    device = torch.device("cuda")
-elif torch.backends.mps.is_available():
-    device = torch.device("mps")
-else:
-    device = torch.device("cpu")
-
-print(f"Using device: {device}")
-
-#setup model, loss function, and optimizer
-model = SingleFrameCNN(num_classes=10).to(device)
-loss_fn = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+data_dir = os.getenv("DATA_DIR", default_dirs[dataset_variant])
 
 
-#lets train
-for epoch in range(epochs):
-    model.train()
-
-    total_loss = 0.0
-    correct = 0
-    total = 0
-
-    for frames, labels in train_loader:
-        frames = frames.to(device)
-        labels = labels.to(device)
-
-        # predict and compute loss
-        optimizer.zero_grad()
-        logits = model(frames)
-        loss = loss_fn(logits, labels)
-        loss.backward()
-        optimizer.step()
-
-        # track loss and accuracy
-        batch_size = labels.size(0)
-        total_loss += loss.item() * batch_size
-        correct += (logits.argmax(dim=1) == labels).sum().item()
-        total += batch_size
-
-    print(f"Epoch {epoch + 1}/{epochs} | Loss: {total_loss / total:.4f} | Frame accuracy: {100 * correct / total:.1f}%" )
-    # eval
-    model.eval()
-    val_correct = 0
-    val_total = 0
-
-    with torch.no_grad():
-        for videos, labels in val_loader:
-            videos = videos.to(device)
-            labels = labels.to(device)
-
-            # [B, 3, T, H, W] -> [B, T, 3, H, W] -> [B*T, 3, H, W]
-            batch_size, channels, num_frames, h, w = videos.shape
-
-            frames = videos.permute(0, 2, 1, 3, 4).reshape(batch_size * num_frames, channels, h, w)
-
-
-            logits = model(frames)
-            frame_probs = torch.softmax(logits, dim=1)
-
-            # gather preds [B, T, 10]
-            frame_probs = frame_probs.reshape(batch_size, num_frames, 10)
-
-            # mean over frames to get video-level predictions
-            video_probs = frame_probs.mean(dim=1)
-            predictions = video_probs.argmax(dim=1)
-
-            val_correct += (predictions == labels).sum().item()
-            val_total += batch_size
-
-    val_accuracy = val_correct / val_total
-    print(f"Validation video accuracy: {100 * val_accuracy:.1f}%, best: {100 * best_val_accuracy:.1f}%")
-
-    history.append({
-        "epoch": epoch + 1,
-        "loss": total_loss / total,
-        "train_frame_accuracy": correct / total,
-        "val_video_accuracy": val_accuracy,
+def train_one_run(seed, phase, overrides=None):
+    started = time.perf_counter()
+    run = wandb.init(project="idlcv-project2", config={
+        "model_name": model_name,
+        "dataset_variant": dataset_variant,
+        "data_dir": data_dir,
+        "seed": seed,
+        "phase": phase,
+        "num_classes": 10,
+        "weights": ResNet50_Weights.DEFAULT.name,
+        "rgb_trainable": "layer4,fc",
+        "resize": [224, 224],
+        "n_sampled_frames": 10,
+        "frame_aggregation": "mean_probabilities",
+        "epochs": 100,
+        "patience": 10,
+        "batch_size": 32,
+        "learning_rate": 0.00003,
+        "weight_decay": 0.0001,
+        "scheduler": "ReduceLROnPlateau",
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 3,
+        "scheduler_min_lr": 1e-6,
+        **(overrides or {}),
     })
 
-    pd.DataFrame(history).to_csv(run_dir / "stats.csv", index=False)
-
-    # early stopping
-    if val_accuracy > best_val_accuracy:
-        best_val_accuracy = val_accuracy
-        epochs_without_improvement = 0
-
-        torch.save({ "model_state_dict": model.state_dict(),"resize": resize,"epoch": epoch + 1,"val_accuracy": val_accuracy,"batch_size": batch_size},run_dir / "best_model.pt" )
-
-        print(f"Saved best model: {100 * val_accuracy:.1f}%")
-
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
     else:
-        epochs_without_improvement += 1
-        print(f"No improvement: {epochs_without_improvement}/{patience}")
+        device = torch.device("cpu")
 
-        if epochs_without_improvement >= patience:
-            print("Early stopping.")
-            break
+    run.config.update({
+        "device": str(device),
+        "device_name": torch.cuda.get_device_name(device)
+        if device.type == "cuda" else str(device),
+        "torch_version": str(torch.__version__),
+    })
+    config = dict(run.config)
+    torch.manual_seed(int(config["seed"]))
 
-#save plots
-stats = pd.DataFrame(history)
-stats.plot(x="epoch", subplots=True, figsize=(7, 8))
+    run_dir = (
+        Path("experiments") / model_name / config["dataset_variant"]
+        / config["phase"] / f"{run.id}_seed{config['seed']}"
+    )
+    run_dir.mkdir(parents=True, exist_ok=True)
+    (run_dir / "config.json").write_text(json.dumps(config), encoding="utf-8")
+    print("Saving run to:", run_dir)
 
-plt.tight_layout()
-plt.savefig(run_dir / "plots.png")
-plt.close()
+    weights = ResNet50_Weights[config["weights"]]
+    transform = weights.transforms()
+    batch_size = int(config["batch_size"])
+
+    train_dataset = FrameImageDataset(
+        root_dir=config["data_dir"], split="train", transform=transform,
+    )
+    val_dataset = FrameVideoDataset(
+        root_dir=config["data_dir"], split="val",
+        transform=transform, stack_frames=True,
+    )
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+
+    model = ResNet50Stream(
+        num_classes=config["num_classes"], weights=weights,
+    ).to(device)
+    for name, parameter in model.backbone.named_parameters():
+        parameter.requires_grad = name.startswith(("layer4.", "fc."))
+
+    optimizer = torch.optim.Adam(
+        (p for p in model.parameters() if p.requires_grad),
+        lr=config["learning_rate"], weight_decay=config["weight_decay"],
+    )
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode="max", factor=config["scheduler_factor"],
+        patience=config["scheduler_patience"],
+        min_lr=config["scheduler_min_lr"],
+    )
+    loss_fn = torch.nn.CrossEntropyLoss()
+    history = []
+    best_val_accuracy = -1.0
+    best_epoch = 0
+    epochs_without_improvement = 0
+
+    for epoch in range(config["epochs"]):
+        model.train()
+        model.backbone.eval()
+        model.backbone.layer4.train()
+        model.backbone.fc.train()
+
+        learning_rate = optimizer.param_groups[0]["lr"]
+        total_loss = 0.0
+        correct = total = 0
+
+        for frames, labels in train_loader:
+            frames, labels = frames.to(device), labels.to(device)
+            optimizer.zero_grad()
+            logits = model(frames)
+            loss = loss_fn(logits, labels)
+            loss.backward()
+            optimizer.step()
+
+            current_batch_size = labels.size(0)
+            total_loss += loss.item() * current_batch_size
+            correct += (logits.argmax(dim=1) == labels).sum().item()
+            total += current_batch_size
+
+        model.eval()
+        val_correct = val_total = 0
+
+        with torch.inference_mode():
+            for videos, labels in val_loader:
+                videos, labels = videos.to(device), labels.to(device)
+                b, c, t, h, w = videos.shape
+                frames = videos.permute(0, 2, 1, 3, 4).reshape(b * t, c, h, w)
+                probabilities = (
+                    model(frames).softmax(dim=1).reshape(b, t, -1).mean(dim=1)
+                )
+                val_correct += (
+                    probabilities.argmax(dim=1) == labels
+                ).sum().item()
+                val_total += b
+
+        val_accuracy = val_correct / val_total
+        scheduler.step(val_accuracy)
+        history.append({
+            "epoch": epoch + 1,
+            "loss": total_loss / total,
+            "train_frame_accuracy": correct / total,
+            "val_video_accuracy": val_accuracy,
+            "learning_rate": learning_rate,
+        })
+        pd.DataFrame(history).to_csv(run_dir / "stats.csv", index=False)
+        run.log({
+            **history[-1],
+            "best_val_video_accuracy": max(best_val_accuracy, val_accuracy),
+        })
+        print(
+            f"Epoch {epoch + 1} | loss {total_loss / total:.4f} | "
+            f"train {100 * correct / total:.1f}% | "
+            f"validation {100 * val_accuracy:.1f}%"
+        )
+
+        if val_accuracy > best_val_accuracy:
+            best_val_accuracy = val_accuracy
+            best_epoch = epoch + 1
+            epochs_without_improvement = 0
+            torch.save({
+                "model_state_dict": model.state_dict(),
+                "model_config": config,
+                "epoch": best_epoch,
+                "val_accuracy": best_val_accuracy,
+            }, run_dir / "best_model.pt")
+        else:
+            epochs_without_improvement += 1
+            if epochs_without_improvement >= config["patience"]:
+                break
+
+    pd.DataFrame(history).plot(x="epoch", subplots=True, figsize=(8, 10))
+    plt.tight_layout()
+    plt.savefig(run_dir / "plots.png")
+    plt.close()
+
+    summary = {
+        "seed": config["seed"],
+        "best_epoch": best_epoch,
+        "best_val_video_accuracy": best_val_accuracy,
+        "run_seconds": time.perf_counter() - started,
+    }
+    pd.DataFrame([summary]).to_csv(run_dir / "train_summary.csv", index=False)
+    run.summary.update(summary)
+    run.finish()
+
+
+if __name__ == "__main__":
+    if os.getenv("WANDB_SWEEP_ID"):
+        train_one_run(0, "search")
+    else:
+        search_dir = (
+            Path("experiments") / model_name / dataset_variant / "search"
+        )
+        best_stats = max(
+            sorted(search_dir.glob("*/stats.csv")),
+            key=lambda path: pd.read_csv(path)["val_video_accuracy"].max(),
+        )
+        best_config = json.loads(
+            (best_stats.parent / "config.json").read_text(encoding="utf-8")
+        )
+        overrides = {
+            key: best_config[key]
+            for key in ("learning_rate", "weight_decay", "batch_size")
+        }
+        print("Selected search run:", best_stats.parent)
+        print("Selected hyperparameters:", overrides)
+        for seed in [0, 42, 666]:
+            train_one_run(seed, "final", overrides)
