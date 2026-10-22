@@ -88,4 +88,26 @@ class DualStreamResNet50(nn.Module):
         return (self.rgb_weight * rgb_probs+ (1.0 - self.rgb_weight) * flow_probs)
 
 
+class LateFusionResNet50(nn.Module):
+
+    def __init__(self, num_classes=10, weights=ResNet50_Weights.DEFAULT):
+        super().__init__()
+        self.backbone = resnet50(weights=weights)
+        feature_dim = self.backbone.fc.in_features  #2048
+        self.backbone.fc = nn.Identity()              
+        self.classifier = nn.Sequential(
+            nn.Dropout(0.3),
+            nn.Linear(feature_dim, num_classes),
+        )
+
+    def forward(self, videos):
+        #videos = [B, 3, T, H, W]
+        batch_size, channels, num_frames, height, width = videos.shape
+        frames = videos.permute(0, 2, 1, 3, 4).reshape(batch_size * num_frames, channels, height, width)
+        features = self.backbone(frames).reshape(batch_size, num_frames, -1)
+        #late fusion over frames
+        fused = features.mean(dim=1)                    
+        return self.classifier(fused)
+
+
 
