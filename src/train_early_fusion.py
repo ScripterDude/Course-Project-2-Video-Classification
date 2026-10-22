@@ -61,7 +61,7 @@ def train_one_run(seed, phase, overrides=None):
 
 	run_dir = (
 		Path("experiments") / model_name / config["dataset_variant"]
-		/ config["phase"] / f"{run_id}_seed{config['seed']}"
+		/ config["phase"] / f"{run.id}_seed{config['seed']}"
 	)
 	run_dir.mkdir(parents=True, exist_ok=True)
 	(run_dir / "config.json").write_text(json.dumps(config), encoding="utf-8")
