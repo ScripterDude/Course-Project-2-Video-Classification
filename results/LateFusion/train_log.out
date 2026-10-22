@@ -1,0 +1,86 @@
+Python executable: /zhome/b0/e/198204/Course-Project-2-Video-Classification/venv/bin/python
+Python 3.9.25
+NumPy: 2.0.2
+PyTorch: 2.8.0+cu128
+Torchvision: 0.23.0+cu128
+Downloading: "https://download.pytorch.org/models/resnet50-11ad3fa6.pth" to /zhome/b0/e/198204/.cache/torch/hub/checkpoints/resnet50-11ad3fa6.pth
+epoch  1 | train loss 1.917 acc 0.452 | val loss 1.013 acc 0.758
+epoch  2 | train loss 0.685 acc 0.862 | val loss 0.287 acc 0.925
+epoch  3 | train loss 0.197 acc 0.976 | val loss 0.176 acc 0.950
+epoch  4 | train loss 0.117 acc 0.980 | val loss 0.198 acc 0.942
+epoch  5 | train loss 0.115 acc 0.978 | val loss 0.170 acc 0.942
+epoch  6 | train loss 0.075 acc 0.990 | val loss 0.257 acc 0.933
+epoch  7 | train loss 0.063 acc 0.986 | val loss 0.199 acc 0.942
+epoch  8 | train loss 0.053 acc 0.990 | val loss 0.201 acc 0.950
+epoch  9 | train loss 0.023 acc 0.998 | val loss 0.202 acc 0.950
+epoch 10 | train loss 0.018 acc 1.000 | val loss 0.196 acc 0.958
+best val acc: 0.958
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 29793259: <train_late_fusion> in cluster <dcc> Done
+
+Job <train_late_fusion> was submitted from host <gbarlogin1> by user <s230199> in cluster <dcc> at Thu Oct 22 23:05:34 2026
+Job was executed on host(s) <n-62-18-13>, in queue <c02516>, as user <s230199> in cluster <dcc> at Thu Oct 22 23:05:36 2026
+</zhome/b0/e/198204> was used as the home directory.
+</zhome/b0/e/198204/Course-Project-2-Video-Classification> was used as the working directory.
+Started at Thu Oct 22 23:05:36 2026
+Terminated at Thu Oct 22 23:15:51 2026
+Results reported at Thu Oct 22 23:15:51 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+
+#!/bin/bash
+#BSUB -q c02516
+#BSUB -app c02516_1g.10gb
+#BSUB -J train_late_fusion
+#BSUB -n 1
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=16GB]"
+#BSUB -W 04:00
+#BSUB -o train_late_fusion_%J.out
+#BSUB -e train_late_fusion_%J.err
+
+module load python3/3.9.25
+module load cuda/12.6.3
+
+source venv/bin/activate
+
+export DATA_DIR="${DATA_DIR:-/dtu/datasets1/02516/ufc10/}"
+
+echo "Python executable: $(which python)"
+python --version
+
+
+python -c "import numpy, torch, torchvision; print('NumPy:', numpy.__version__); print('PyTorch:', torch.__version__); print('Torchvision:', torchvision.__version__)"
+
+python -u src/train_late_fusion.py
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   517.32 sec.
+    Max Memory :                                 1174 MB
+    Average Memory :                             1005.83 MB
+    Total Requested Memory :                     16384.00 MB
+    Delta Memory :                               15210.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                9
+    Run time :                                   615 sec.
+    Turnaround time :                            617 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <train_late_fusion_29793259.err> for stderr output of this job.
+
