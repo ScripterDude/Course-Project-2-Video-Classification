@@ -87,21 +87,6 @@ class DualStreamResNet50(nn.Module):
         #wieght the two streams
         return (self.rgb_weight * rgb_probs+ (1.0 - self.rgb_weight) * flow_probs)
 
-class EarlyFusionResNet50(nn.Module):
-    """Frames are stacked in the channels, so conv1 sees all T frames at once."""
-    def __init__(self, num_frames, num_classes=10, weights=ResNet50_Weights.DEFAULT):
-        super().__init__()
-        self.net = resnet50(weights=weights)
-        old = self.net.conv1
-        new = nn.Conv2d(3 * num_frames, old.out_channels, old.kernel_size, old.stride, old.padding, bias=False)
-        new.weight.data = old.weight.data.repeat(1, num_frames, 1, 1) / num_frames  # reuse pretrained filters
-        self.net.conv1 = new
-        self.net.fc = nn.Sequential(nn.Dropout(0.3), nn.Linear(self.net.fc.in_features, num_classes))
-
-    def forward(self, x):                                   # x: [B, 3, T, H, W]
-        B, C, T, H, W = x.shape
-        x = x.permute(0, 2, 1, 3, 4).reshape(B, T * C, H, W)  # -> [B, 3T, H, W]
-        return self.net(x)
 
 class LateFusionResNet50(nn.Module):
 

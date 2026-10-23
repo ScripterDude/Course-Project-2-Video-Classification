@@ -23,6 +23,6 @@ parameters:
     max: 0.001
 
 command:
-  - python
+  - python3
   - "-u"
   - ${program}
