@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import json
 import os
 import wandb
+from validation_reports import save_validation_reports, summarize_validation_reports
 
 #run the training with one seed
 def train_one_run(seed, phase, overrides=None):
@@ -286,7 +287,15 @@ def train_one_run(seed, phase, overrides=None):
     plt.savefig(run_dir / 'plots.png')
     plt.close()
 
+    validation_report = None
+    if phase == "final":
+        validation_report = save_validation_reports(
+            model, rgb_val_loader, run_dir, device,
+            flow_loader=flow_val_loader,
+        )
+
     run.finish()
+    return validation_report
 
 if __name__ == "__main__":
     phase = "search" if os.getenv("WANDB_SWEEP_ID") else "final"
@@ -320,5 +329,5 @@ if __name__ == "__main__":
 
     seeds = [0] if phase == "search" else [0, 42, 666]
 
-    for seed in seeds:
-        train_one_run(seed, phase, overrides)
+    validation_reports = [train_one_run(seed, phase, overrides) for seed in seeds]
+    summarize_validation_reports(validation_reports)

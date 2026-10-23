@@ -12,9 +12,10 @@ from torchvision.models import ResNet50_Weights
 
 from datasets import FrameImageDataset, FrameVideoDataset
 from models import ResNet50Stream
+from validation_reports import save_validation_reports, summarize_validation_reports
 
 model_name = "SingleFrameResNet50"
-dataset_variant = os.getenv("DATASET_VARIANT", "noleakage")
+dataset_variant = os.getenv("DATASET_VARIANT", "original")
 default_dirs = {
     "original": "Data/ufc101",
     "noleakage": "Data/ucf101_noleakage",
@@ -194,7 +195,15 @@ def train_one_run(seed, phase, overrides=None):
     }
     pd.DataFrame([summary]).to_csv(run_dir / "train_summary.csv", index=False)
     run.summary.update(summary)
+
+    validation_report = None
+    if config["phase"] == "final":
+        validation_report = save_validation_reports(
+            model, val_loader, run_dir, device,
+        )
+
     run.finish()
+    return validation_report
 
 
 if __name__ == "__main__":
@@ -217,5 +226,6 @@ if __name__ == "__main__":
         }
         print("Selected search run:", best_stats.parent)
         print("Selected hyperparameters:", overrides)
-        for seed in [0, 42, 666]:
-            train_one_run(seed, "final", overrides)
+        validation_reports = [train_one_run(seed, "final", overrides)for seed in [0, 42, 666]]
+        summarize_validation_reports(validation_reports)
+
