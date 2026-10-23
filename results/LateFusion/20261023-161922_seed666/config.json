@@ -1,0 +1,1 @@
+{"model_name": "LateFusionResNet50", "dataset_variant": "original", "data_dir": "/dtu/datasets1/02516/ufc10/", "seed": 666, "phase": "final", "num_classes": 10, "weights": "IMAGENET1K_V2", "frame_aggregation": "mean_features", "n_sampled_frames": 10, "epochs": 10, "batch_size": 8, "learning_rate": 0.0001, "device": "cuda"}

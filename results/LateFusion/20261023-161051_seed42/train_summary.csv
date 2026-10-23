@@ -1,0 +1,2 @@
+seed,best_epoch,best_val_video_accuracy,run_seconds
+42,10,0.975,511.61695058702026
