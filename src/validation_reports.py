@@ -20,7 +20,7 @@ def _save_cm(cm, path, title, percent=False):
     plt.close(fig)
 
 
-def save_validation_reports(model, rgb_loader, run_dir, device, flow_loader=None):
+def save_validation_reports(model, rgb_loader, run_dir, device, flow_loader=None, clip_model=False):
     run_dir = Path(run_dir)
     checkpoint = torch.load(
         run_dir / "best_model.pt", map_location="cpu", weights_only=True,
@@ -61,16 +61,18 @@ def save_validation_reports(model, rgb_loader, run_dir, device, flow_loader=None
     with torch.inference_mode():
         for (videos, labels), flow_batch in batches:
             videos = videos.to(device)
-            b, c, t, h, w = videos.shape
-            frames = videos.permute(0, 2, 1, 3, 4).reshape(b * t, c, h, w)
-
-            rgb_model = model if flow_loader is None else model.rgb_stream
-            probabilities = {
-                "rgb": (
-                    rgb_model(frames).softmax(dim=1)
-                    .reshape(b, t, -1).mean(dim=1)
-                )
-            }
+            if clip_model:   # fusion models take the whole clip [B, 3, T, H, W]
+                probabilities = {"rgb": model(videos).softmax(dim=1)}
+            else:
+                b, c, t, h, w = videos.shape
+                frames = videos.permute(0, 2, 1, 3, 4).reshape(b * t, c, h, w)
+                rgb_model = model if flow_loader is None else model.rgb_stream
+                probabilities = {
+                    "rgb": (
+                        rgb_model(frames).softmax(dim=1)
+                        .reshape(b, t, -1).mean(dim=1)
+                    )
+                }
 
             if flow_batch is not None:
                 flows, flow_labels = flow_batch
