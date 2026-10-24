@@ -16,7 +16,8 @@ source venv/bin/activate
 
 export DATASET_VARIANT=original
 export DATA_DIR="${DATA_DIR:-/dtu/datasets1/02516/ufc10/}"
-export WANDB_MODE=offline
+
+
 
 echo "Python executable: $(which python)"
 python --version
