@@ -86,8 +86,8 @@ def train_one_run(seed, phase, overrides=None):
         transform=transform, stack_frames=True,
     )
     assert train_dataset.n_sampled_frames == config["n_sampled_frames"]
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
 
     model = LateFusionResNet50(
         num_classes=config["num_classes"], weights=weights,

@@ -2,7 +2,7 @@
 #BSUB -q c02516
 #BSUB -app c02516_1g.10gb
 #BSUB -J train_late_fusion
-#BSUB -n 1
+#BSUB -n 4
 #BSUB -R "span[hosts=1]"
 #BSUB -R "rusage[mem=16GB]"
 #BSUB -W 12:00
