@@ -9,7 +9,7 @@ from torchvision import transforms as T
 from torchvision.models import ResNet50_Weights
 
 from datasets import FrameVideoDataset, FlowVideoDataset
-from models import SingleFrameCNN, ResNet50Stream, DualStreamResNet50
+from models import SingleFrameCNN, ResNet50Stream, DualStreamResNet50, LateFusionResNet50
 
 # Choose which experiment directories to visualize.
 final_dirs = [
@@ -17,6 +17,7 @@ final_dirs = [
     Path("experiments/SingleFrameResNet50/noleakage/final"),
     Path("experiments/DualStreamResNet50/final"),
     Path("experiments/SingleFrameCNN/final"),
+    Path("experiments/LateFusionResNet50/original/final"),
 ]
 data_overrides = {}  # Optional: {"saved/dataset/path": "current/dataset/path"}
 max_errors = 6
@@ -34,7 +35,11 @@ model_builders = {
         num_classes=c["num_classes"], flow_channels=c["flow_channels"],
         rgb_weight=c["rgb_weight"], weights=None,
     ),
+    "LateFusionResNet50": lambda c: LateFusionResNet50(
+        num_classes=c["num_classes"], weights=None,
+    ),
 }
+clip_models = {"LateFusionResNet50"}  # take the whole clip [B, 3, T, H, W]
 
 
 def predict_probabilities(model, videos, flows, config):
@@ -47,6 +52,9 @@ def predict_probabilities(model, videos, flows, config):
 
         # DualStreamResNet50 already returns fused probabilities.
         return model(videos, flows)
+
+    if config["model_name"] in clip_models:
+        return model(videos).softmax(dim=1)
 
     b, c, t, h, w = videos.shape
     frames = videos.permute(0, 2, 1, 3, 4).reshape(b * t, c, h, w)

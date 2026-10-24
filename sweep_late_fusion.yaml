@@ -1,0 +1,28 @@
+program: src/train_late_fusion.py
+method: bayes
+run_cap: 10
+
+metric:
+  name: best_val_video_accuracy
+  goal: maximize
+
+parameters:
+  seed:
+    value: 0
+  phase:
+    value: search
+  batch_size:
+    value: 32
+  learning_rate:
+    distribution: log_uniform_values
+    min: 0.00001
+    max: 0.0001
+  weight_decay:
+    distribution: log_uniform_values
+    min: 0.000001
+    max: 0.001
+
+command:
+  - python3
+  - "-u"
+  - ${program}

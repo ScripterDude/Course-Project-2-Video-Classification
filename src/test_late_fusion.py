@@ -1,4 +1,5 @@
 import os
+import sys
 import torch
 from torch.utils.data import DataLoader
 from torchvision.models import ResNet50_Weights
@@ -8,7 +9,9 @@ from models import LateFusionResNet50
 
 BATCH_SIZE = 8
 WEIGHTS = ResNet50_Weights.DEFAULT
-CHECKPOINT = 'results/LateFusion/best_model.pt'
+# pass the checkpoint as an argument, e.g.
+# python src/test_late_fusion.py experiments/LateFusionResNet50/original/final/<run>_seed0/best_model.pt
+CHECKPOINT = sys.argv[1] if len(sys.argv) > 1 else 'results/LateFusion/best_model.pt'
 
 
 if __name__ == '__main__':
