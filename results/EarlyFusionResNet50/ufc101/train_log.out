@@ -1,0 +1,217 @@
+Python executable: /zhome/74/f/234149/Course-Project-2-Video-Classification/venv/bin/python
+Python 3.9.25
+NumPy: 2.0.2
+PyTorch: 2.8.0+cu128
+Torchvision: 0.23.0+cu128
+Selected search run: experiments/EarlyFusionResNet50/original/search/z72fr6hv_seed0
+Selected hyperparameters: {'learning_rate': 7.893984517980544e-05, 'weight_decay': 0.0003562295690630376, 'batch_size': 32}
+Saving run to: experiments/EarlyFusionResNet50/original/final/xu7nd5em_seed0
+Epoch 1 | loss 2.3116 | train 11.8% | validation 15.8%
+Epoch 2 | loss 2.2575 | train 17.0% | validation 17.5%
+Epoch 3 | loss 2.2109 | train 20.4% | validation 19.2%
+Epoch 4 | loss 2.1654 | train 26.4% | validation 25.0%
+Epoch 5 | loss 2.0935 | train 35.6% | validation 31.7%
+Epoch 6 | loss 2.0485 | train 40.0% | validation 35.8%
+Epoch 7 | loss 1.9880 | train 47.0% | validation 44.2%
+Epoch 8 | loss 1.9289 | train 53.0% | validation 47.5%
+Epoch 9 | loss 1.8717 | train 58.8% | validation 50.8%
+Epoch 10 | loss 1.8202 | train 62.0% | validation 54.2%
+Epoch 11 | loss 1.7827 | train 63.0% | validation 55.0%
+Epoch 12 | loss 1.7221 | train 65.4% | validation 53.3%
+Epoch 13 | loss 1.6762 | train 67.4% | validation 59.2%
+Epoch 14 | loss 1.6267 | train 70.4% | validation 60.8%
+Epoch 15 | loss 1.5887 | train 74.8% | validation 67.5%
+Epoch 16 | loss 1.5519 | train 74.4% | validation 65.8%
+Epoch 17 | loss 1.4943 | train 75.4% | validation 69.2%
+Epoch 18 | loss 1.4626 | train 77.8% | validation 68.3%
+Epoch 19 | loss 1.4280 | train 78.6% | validation 67.5%
+Epoch 20 | loss 1.3951 | train 77.6% | validation 67.5%
+Epoch 21 | loss 1.3514 | train 78.2% | validation 70.8%
+Epoch 22 | loss 1.3128 | train 82.0% | validation 70.0%
+Epoch 23 | loss 1.2940 | train 81.8% | validation 70.0%
+Epoch 24 | loss 1.2552 | train 82.4% | validation 67.5%
+Epoch 25 | loss 1.2235 | train 83.0% | validation 71.7%
+Epoch 26 | loss 1.1903 | train 85.0% | validation 72.5%
+Epoch 27 | loss 1.1636 | train 84.2% | validation 68.3%
+Epoch 28 | loss 1.1214 | train 86.8% | validation 68.3%
+Epoch 29 | loss 1.0918 | train 87.4% | validation 74.2%
+Epoch 30 | loss 1.0642 | train 88.8% | validation 75.0%
+Epoch 31 | loss 1.0457 | train 88.4% | validation 71.7%
+Epoch 32 | loss 1.0232 | train 88.2% | validation 72.5%
+Epoch 33 | loss 1.0107 | train 87.4% | validation 74.2%
+Epoch 34 | loss 0.9579 | train 89.0% | validation 74.2%
+Epoch 35 | loss 0.9354 | train 90.0% | validation 75.0%
+Epoch 36 | loss 0.9182 | train 90.6% | validation 74.2%
+Epoch 37 | loss 0.9022 | train 91.0% | validation 73.3%
+Epoch 38 | loss 0.8967 | train 91.2% | validation 73.3%
+Epoch 39 | loss 0.8824 | train 91.6% | validation 73.3%
+Epoch 40 | loss 0.8802 | train 91.0% | validation 75.8%
+Epoch 41 | loss 0.8653 | train 92.2% | validation 73.3%
+Epoch 42 | loss 0.8485 | train 92.6% | validation 74.2%
+Epoch 43 | loss 0.8490 | train 91.8% | validation 74.2%
+Epoch 44 | loss 0.8507 | train 91.6% | validation 74.2%
+Epoch 45 | loss 0.8401 | train 91.2% | validation 73.3%
+Epoch 46 | loss 0.8417 | train 92.6% | validation 73.3%
+Epoch 47 | loss 0.8370 | train 92.6% | validation 74.2%
+Epoch 48 | loss 0.8277 | train 92.2% | validation 73.3%
+Epoch 49 | loss 0.8332 | train 91.6% | validation 74.2%
+Epoch 50 | loss 0.8297 | train 91.6% | validation 73.3%
+Saving run to: experiments/EarlyFusionResNet50/original/final/n4eieu7z_seed42
+Epoch 1 | loss 2.2902 | train 12.4% | validation 21.7%
+Epoch 2 | loss 2.2182 | train 21.4% | validation 25.8%
+Epoch 3 | loss 2.1535 | train 27.2% | validation 35.8%
+Epoch 4 | loss 2.0914 | train 36.0% | validation 40.0%
+Epoch 5 | loss 2.0328 | train 42.2% | validation 45.0%
+Epoch 6 | loss 1.9816 | train 48.0% | validation 40.8%
+Epoch 7 | loss 1.9161 | train 53.8% | validation 47.5%
+Epoch 8 | loss 1.8746 | train 56.6% | validation 50.8%
+Epoch 9 | loss 1.8156 | train 60.0% | validation 51.7%
+Epoch 10 | loss 1.7627 | train 65.0% | validation 56.7%
+Epoch 11 | loss 1.7150 | train 69.6% | validation 60.8%
+Epoch 12 | loss 1.6858 | train 68.2% | validation 58.3%
+Epoch 13 | loss 1.6342 | train 71.4% | validation 59.2%
+Epoch 14 | loss 1.5922 | train 71.2% | validation 63.3%
+Epoch 15 | loss 1.5385 | train 76.2% | validation 63.3%
+Epoch 16 | loss 1.4945 | train 77.6% | validation 68.3%
+Epoch 17 | loss 1.4524 | train 78.4% | validation 65.8%
+Epoch 18 | loss 1.4141 | train 80.0% | validation 67.5%
+Epoch 19 | loss 1.3896 | train 80.4% | validation 66.7%
+Epoch 20 | loss 1.3426 | train 81.8% | validation 66.7%
+Epoch 21 | loss 1.3103 | train 81.4% | validation 66.7%
+Epoch 22 | loss 1.2832 | train 83.0% | validation 65.8%
+Epoch 23 | loss 1.2693 | train 83.2% | validation 68.3%
+Epoch 24 | loss 1.2362 | train 85.6% | validation 68.3%
+Epoch 25 | loss 1.2287 | train 84.0% | validation 67.5%
+Epoch 26 | loss 1.2093 | train 85.2% | validation 69.2%
+Epoch 27 | loss 1.2025 | train 86.0% | validation 69.2%
+Epoch 28 | loss 1.1911 | train 86.0% | validation 68.3%
+Epoch 29 | loss 1.1740 | train 86.0% | validation 68.3%
+Epoch 30 | loss 1.1753 | train 87.0% | validation 67.5%
+Epoch 31 | loss 1.1688 | train 85.8% | validation 68.3%
+Epoch 32 | loss 1.1564 | train 87.8% | validation 69.2%
+Epoch 33 | loss 1.1522 | train 88.6% | validation 69.2%
+Epoch 34 | loss 1.1578 | train 87.4% | validation 69.2%
+Epoch 35 | loss 1.1423 | train 88.0% | validation 69.2%
+Epoch 36 | loss 1.1430 | train 88.2% | validation 68.3%
+Saving run to: experiments/EarlyFusionResNet50/original/final/62h23bcl_seed666
+Epoch 1 | loss 2.2819 | train 13.0% | validation 19.2%
+Epoch 2 | loss 2.2171 | train 19.8% | validation 21.7%
+Epoch 3 | loss 2.1515 | train 26.4% | validation 25.0%
+Epoch 4 | loss 2.0877 | train 34.8% | validation 30.0%
+Epoch 5 | loss 2.0308 | train 42.0% | validation 34.2%
+Epoch 6 | loss 1.9716 | train 48.2% | validation 37.5%
+Epoch 7 | loss 1.9230 | train 51.2% | validation 45.0%
+Epoch 8 | loss 1.8645 | train 56.8% | validation 50.0%
+Epoch 9 | loss 1.7979 | train 61.4% | validation 46.7%
+Epoch 10 | loss 1.7688 | train 63.8% | validation 53.3%
+Epoch 11 | loss 1.7227 | train 65.2% | validation 55.0%
+Epoch 12 | loss 1.6621 | train 68.4% | validation 55.8%
+Epoch 13 | loss 1.6324 | train 70.2% | validation 57.5%
+Epoch 14 | loss 1.5879 | train 71.4% | validation 60.0%
+Epoch 15 | loss 1.5478 | train 74.8% | validation 59.2%
+Epoch 16 | loss 1.5071 | train 75.6% | validation 61.7%
+Epoch 17 | loss 1.4580 | train 75.6% | validation 65.0%
+Epoch 18 | loss 1.4276 | train 74.4% | validation 60.0%
+Epoch 19 | loss 1.4226 | train 75.0% | validation 62.5%
+Epoch 20 | loss 1.3611 | train 79.4% | validation 64.2%
+Epoch 21 | loss 1.3077 | train 80.6% | validation 63.3%
+Epoch 22 | loss 1.2887 | train 80.4% | validation 65.8%
+Epoch 23 | loss 1.2673 | train 81.6% | validation 65.8%
+Epoch 24 | loss 1.2322 | train 85.0% | validation 63.3%
+Epoch 25 | loss 1.2220 | train 85.4% | validation 64.2%
+Epoch 26 | loss 1.2041 | train 84.6% | validation 67.5%
+Epoch 27 | loss 1.1699 | train 87.2% | validation 68.3%
+Epoch 28 | loss 1.1798 | train 85.4% | validation 65.8%
+Epoch 29 | loss 1.1643 | train 86.0% | validation 67.5%
+Epoch 30 | loss 1.1397 | train 85.8% | validation 65.8%
+Epoch 31 | loss 1.1168 | train 87.4% | validation 67.5%
+Epoch 32 | loss 1.1071 | train 86.6% | validation 65.8%
+Epoch 33 | loss 1.0956 | train 86.4% | validation 68.3%
+Epoch 34 | loss 1.0734 | train 88.0% | validation 69.2%
+Epoch 35 | loss 1.0687 | train 89.0% | validation 67.5%
+Epoch 36 | loss 1.0564 | train 86.8% | validation 66.7%
+Epoch 37 | loss 1.0502 | train 87.8% | validation 70.0%
+Epoch 38 | loss 1.0516 | train 87.8% | validation 67.5%
+Epoch 39 | loss 1.0488 | train 88.0% | validation 65.8%
+Epoch 40 | loss 1.0354 | train 88.8% | validation 69.2%
+Epoch 41 | loss 1.0203 | train 89.0% | validation 69.2%
+Epoch 42 | loss 1.0193 | train 87.6% | validation 70.8%
+Epoch 43 | loss 1.0009 | train 90.2% | validation 69.2%
+Epoch 44 | loss 1.0105 | train 89.0% | validation 70.8%
+Epoch 45 | loss 0.9916 | train 91.2% | validation 67.5%
+Epoch 46 | loss 0.9959 | train 89.6% | validation 70.0%
+Epoch 47 | loss 0.9993 | train 90.0% | validation 70.0%
+Epoch 48 | loss 0.9852 | train 89.6% | validation 70.0%
+Epoch 49 | loss 0.9922 | train 89.0% | validation 70.8%
+Epoch 50 | loss 0.9782 | train 90.6% | validation 69.2%
+Epoch 51 | loss 0.9778 | train 88.6% | validation 70.0%
+Epoch 52 | loss 0.9826 | train 89.0% | validation 70.0%
+Validation RGB: 71.94% +/- 3.47%
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 29809265: <train_early_fusion> in cluster <dcc> Done
+
+Job <train_early_fusion> was submitted from host <gbarlogin1> by user <s264001> in cluster <dcc> at Sun Oct 25 00:30:37 2026
+Job was executed on host(s) <n-62-18-13>, in queue <c02516>, as user <s264001> in cluster <dcc> at Sun Oct 25 00:30:37 2026
+</zhome/74/f/234149> was used as the home directory.
+</zhome/74/f/234149/Course-Project-2-Video-Classification> was used as the working directory.
+Started at Sun Oct 25 00:30:37 2026
+Terminated at Sun Oct 25 01:10:37 2026
+Results reported at Sun Oct 25 01:10:37 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+#BSUB -q c02516
+#BSUB -app c02516_1g.10gb
+#BSUB -J train_early_fusion
+#BSUB -n 1
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=16GB]"
+#BSUB -W 12:00
+#BSUB -o train_early_fusion_%J.out
+#BSUB -e train_early_fusion_%J.err
+
+module load python3/3.9.25
+module load cuda/12.6.3
+
+source venv/bin/activate
+
+export DATASET_VARIANT=original
+export DATA_DIR="${DATA_DIR:-/dtu/datasets1/02516/ufc10/}"
+export WANDB_MODE=offline
+
+echo "Python executable: $(which python)"
+python --version
+
+python -c "import numpy, torch, torchvision; print('NumPy:', numpy.__version__); print('PyTorch:', torch.__version__); print('Torchvision:', torchvision.__version__)"
+
+python -u src/train_early_fusion.py
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   2241.51 sec.
+    Max Memory :                                 1547 MB
+    Average Memory :                             1289.42 MB
+    Total Requested Memory :                     16384.00 MB
+    Delta Memory :                               14837.00 MB
+    Max Swap :                                   -
+    Max Processes :                              6
+    Max Threads :                                20
+    Run time :                                   2400 sec.
+    Turnaround time :                            2400 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <train_early_fusion_29809265.err> for stderr output of this job.
+
